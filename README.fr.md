@@ -1,7 +1,7 @@
 # Horosc pour Google Sheets
 
-[![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/Turbehrt/horosc-GoogleSheets/master/README.md)
-[![fr](https://img.shields.io/badge/lang-fr-blue.svg)](https://github.com/Turbehrt/horosc-GoogleSheets/master/README.fr.md)
+[![en](https://img.shields.io/badge/lang-en-red.svg)](/README.md)
+[![fr](https://img.shields.io/badge/lang-fr-blue.svg)](/README.fr.md)
 
 ## Contexte du projet
 L'ouvrage de John D. North, *Horoscopes and History*, Londres : Warburg Institute, 1986, publiait en annexe (appendix 4 p. 197-218) le code d’un programme en Pascal pour MS-DOS, intitulé **HOROSC** et visant à calculer et contrôler la domification d’un horoscope en suivant les 7 principales méthodes historiques.
