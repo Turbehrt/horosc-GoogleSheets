@@ -33,7 +33,7 @@ le programe fournit :
 *	un calcul théorique de la latitude du lieu d’observation (avec un intervalle correspondant à la marge d’erreur, appliquée à l’ascension droite de l’ascendant ou du milieu du ciel)
 *	une comparaison avec les longitudes théoriques (calculées en considérant justes l'ascendant et le milieu du ciel) selon les 7 méthodes de domification historique, avec coefficient de qualité (permettant généralement d’identifier la méthode effectivement utilisée)
 
-Cette méthode est restituée ici par la formule Google Sheets `computeLongitudesAllMethodsLongitude(obliquité de l’écliptique, marge d’erreur, longitudes des 6 maisons, nombre de ligne)`.
+Cette méthode est restituée ici par la formule Google Sheets `computeLongitudesAllMethodsLongitude(obliquité de l’écliptique, marge d’erreur, longitudes des 6 maisons, nombre de lignes)`.
 Elle produit quatre tableaux : longitudes théoriques, coefficients de qualité, ascensions droites et intervalle de latitude géographique.
 
 ### Implémentation Google Sheets
