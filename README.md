@@ -43,7 +43,7 @@ It produces four tables: theoretical longitudes, quality coefficients, right asc
 
 ### Google Sheets implementation
 
-A model spreadsheet is available: xxx (read-only: to be copied and modified in a personal Google space).
+A model spreadsheet is available: https://docs.google.com/spreadsheets/d/1dgQrJaP_dA9V-9qrfeBkJBjlTtezqR3PmNLpIvNoAyw/copy (read-only: to be copied and modified in a personal Google space).
 
 > [!NOTE]
 > All numbers (inputs and results, except for quality coefficients) are expressed in degrees in sexagesimal form (e.g. 187.12'04 for 187°12'04'').
