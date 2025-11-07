@@ -1,9 +1,15 @@
-// This application is based on John D. North's Horosc software
+// This application is based on John D. North's HOROSC software
 // after the MS-DOS Pascal code published in
 // John D. North, Horoscopes and History (London: The Warburg Institute, 1986), Appendix 4
 
-// Adaptation for Google Sheets for non-commercial research by François J. Tur, 2021
-// You are free to use of this code in accordance with copyright laws in your country.
+// Adaptation for Google Sheets by François J. Tur and Alexandre Tur, 2021.
+
+// This software is governed by the CeCILL-B license under French law and
+// abiding by the rules of distribution of free software.  You can  use, 
+// modify and/ or redistribute the software under the terms of the CeCILL-B
+// license as circulated by CEA, CNRS and INRIA at the following URL:
+// http://www.cecill.info.
+
 
 const TwoPI = Math.PI*2.0
 const HalfPI = Math.PI/2.0
