@@ -1,6 +1,10 @@
 CeCILL-B FREE SOFTWARE LICENSE AGREEMENT
 =========
 
+[![en](https://img.shields.io/badge/lang-en-red.svg)](/LICENSE.md)
+[![fr](https://img.shields.io/badge/lang-fr-blue.svg)](/LICENSE.fr.md)
+
+
 #    Notice
 
 This Agreement is a Free Software license agreement that is the result
