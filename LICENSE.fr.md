@@ -1,6 +1,10 @@
 CONTRAT DE LICENCE DE LOGICIEL LIBRE CeCILL-B
 =========
 
+[![en](https://img.shields.io/badge/lang-en-red.svg)](/LICENSE.md)
+[![fr](https://img.shields.io/badge/lang-fr-blue.svg)](/LICENSE.fr.md)
+
+
 #    Avertissement
 
 Ce contrat est une licence de logiciel libre issue d'une concertation
