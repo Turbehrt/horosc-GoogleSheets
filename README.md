@@ -3,6 +3,8 @@
 [![en](https://img.shields.io/badge/lang-en-red.svg)](/README.md)
 [![fr](https://img.shields.io/badge/lang-fr-blue.svg)](/README.fr.md)
 
+Version 1.1 (2025)
+
 ## Project background
 
 John D. North's book, *Horoscopes and History*, London: Warburg Institute, 1986, published in an appendix (appendix 4, pp. 197-218) the Pascal for MS-DOS code of an application entitled **HOROSC** and designed to calculate and check the domification of a horoscope using the seven main historical methods.
@@ -43,7 +45,7 @@ It produces four tables: theoretical longitudes, quality coefficients, right asc
 
 ### Google Sheets implementation
 
-A model spreadsheet is available: https://docs.google.com/spreadsheets/d/1dgQrJaP_dA9V-9qrfeBkJBjlTtezqR3PmNLpIvNoAyw/copy (read-only: to be copied and modified in a personal Google space).
+A model spreadsheet is available: https://docs.google.com/spreadsheets/d/1UWJM_OhMITBi0EqJBSEJliBTDF_XL4UtUA6idv0KYEA/copy (read-only: to be copied and modified in a personal Google space).
 
 > [!NOTE]
 > All numbers (inputs and results, except for quality coefficients) are expressed in degrees in sexagesimal form (e.g. 187.12'04 for 187°12'04'').
