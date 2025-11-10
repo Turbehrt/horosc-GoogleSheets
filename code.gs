@@ -2,7 +2,7 @@
 // after the MS-DOS Pascal code published in
 // John D. North, Horoscopes and History (London: The Warburg Institute, 1986), Appendix 4
 
-// Adaptation for Google Sheets by François J. Tur and Alexandre Tur, 2021.
+// Adaptation for Google Sheets by François J. Tur and Alexandre Tur, 2021-.
 
 // This software is governed by the CeCILL-B license under French law and
 // abiding by the rules of distribution of free software.  You can  use, 
@@ -11,13 +11,16 @@
 // http://www.cecill.info.
 
 
+// Auxiliary trigonometry
+
 const TwoPI = Math.PI * 2.0;
 const HalfPI = Math.PI / 2.0;
 const ThirdPI = Math.PI / 3.0;
 const SixthPI = Math.PI / 6.0;
 
+
 /**
- * for periodic function, ensure the value is within 0 - range, by cutting it by range size
+ * for a periodic function, ensures the value is within 0 - range, by cutting it by range size
  * @param {real} value to bound
  * @param {real} range upper bound of the range. 0 is the lower bound
  * @return {real} bounded value within range
@@ -35,7 +38,7 @@ function moduloRange(value, range) {
 }
 
 /**
- * compute the symetry of a value against a symetry point
+ * computes the symetry of a value against a symetry point
  * @customfunction
  */
 function symetryTo(value, symetryPoint) {
@@ -48,24 +51,18 @@ function moduloTwoPI(value) {
   return moduloRange(value, TwoPI);
 }
 
-/**
- * extract the format from a sexagesimal value
- * ie the chars that separate degrees from minutes
- * and the chars that separate minutes from seconds
- *
- * @param {string} a sexagesimal value
- * @return the two values for separator as an Array
- */
+
+// Degree/radian conversion and sexagesimal display
 
 const SEXA_FORMAT = new RegExp("\\d+(\\D+)\\d+(\\D+)");
 const SEXA_VALUE = new RegExp("(\\d+)\\D+(\\d+)\\D+(\\d+)");
 
 /**
- * Extract the sexagesimal format from a sexagesimal value
- * format is the set of separators betweem the different elements of the value
+ * Extracts the sexagesimal format from a sexagesimal value
+ * format is the set of separators between the different elements of the value
  *
- * @param {string} the sexagesimal template
- * @return {Array of string} the format value to reuse later for formatting when translation radian to sexagesimal
+ * @param {string} sexa the sexagesimal template
+ * @return {Array of string} the format value to reuse later for formatting when converting radian to sexagesimal
  * @customfunction
  */
 function sexagesimalFormat(sexa) {
@@ -74,8 +71,9 @@ function sexagesimalFormat(sexa) {
 }
 
 /**
- * @param {string} sexa the sexagesimal value to transform
- * @return {real} the corresponding radian value
+ * converts a sexagesimal string (representing an angle in degrees) into an angle in radian
+ * @param {string} sexa the sexagesimal value to convert
+ * @return {real} the equivalent radian value
  * @customfunction
  */
 function sexagesimalToRadian(sexa) {
@@ -96,9 +94,10 @@ function sexagesimalToRadian(sexa) {
 }
 
 /**
+ * converts an angle in radian into a sexagesimal representation in degrees, using a given set of symbols
  * @param {real} radian value to convert
- * @param {string or Array of string} fmt - optional -  the format for presentation
- *  - if provided as string the 2 chars first one for degrees sep, second for minutes sep
+ * @param {string or Array of strings} fmt - optional -  the format for presentation
+ *  - if provided as string: 2 chars, first one for degrees separator, second for minutes separator
  *  - if provided as Array, then each element of the array are used as separator
  * @return {string} the sexagesimal representation of the radian value
  * @customfunction
@@ -120,8 +119,11 @@ function radianToSexagesimal(radian, fmt = ".'") {
   }${s}`;
 }
 
+
+// Astronomical trigonometry
+
 /**
- * convert a longitude in right ascension for a given obliquity of the ecliptic
+ * converts a longitude in right ascension for a given obliquity of the ecliptic
  * @param {real} obliquity in radian
  * @param {real} longitude in radian
  * @return {real} the computed right ascension
@@ -129,18 +131,20 @@ function radianToSexagesimal(radian, fmt = ".'") {
  */
 function eclipticToEquator(obliquity, longitude) {
   return moduloTwoPI(
-    Math.atan2(Math.cos(obliquity) * Math.sin(longitude), Math.cos(longitude))
+    Math.atan2(
+      Math.cos(obliquity) * Math.sin(longitude),
+      Math.cos(longitude)
+    )
   );
 }
 
 /**
- * convert a right ascention in longitude for a given obliquity of the ecliptic
+ * converts a right ascension in longitude for a given obliquity of the ecliptic
  * @param {real} obliquity in radian
- * @param {real} right ascention in radian
+ * @param {real} right ascension in radian
  * @return {real} the computed longitude
  * @customfunction
  */
-
 function equatorToEcliptic(obliquity, rightAscension) {
   return moduloTwoPI(
     Math.atan2(
@@ -150,8 +154,9 @@ function equatorToEcliptic(obliquity, rightAscension) {
   );
 }
 
+
 /**
- * calculates the theoretical latitude of the observation location from the obliquity of the ecliptic and the right ascension of the ascendant and the Imum Caeli (IMC).
+ * calculates the theoretical latitude of the observation location from the obliquity of the ecliptic and the right ascension of the ascendant and the Imum Caeli (IMC, opposite the Medium Caeli).
  * @param {real} obliquity in radian
  * @param {real} right ascension of the ascendant in radian
  * @param {real} right ascension of the IMC in radian
@@ -173,7 +178,6 @@ function retrieveLatitude(obliquity, rightASC, rightIMC) {
 
 /**
  * calculates the theoretical latitude of the observation location from the obliquity of the ecliptic and the longitude of the ascendant and the Imum Caeli (IMC).
- *
  * @param {real} obliquity in radian
  * @param {real} longitude of the ascendant in radian
  * @param {real} longitude of the IMC in radian
@@ -186,6 +190,9 @@ function retrieveLatitudeFromLong(obliquity, longASC, longIMC) {
 
   return retrieveLatitude(obliquity, rightASC, rightIMC);
 }
+
+
+// Domification
 
 function converge(
   cusp,
@@ -209,18 +216,18 @@ function converge(
 }
 
 /**
- * compute the coordinates (right Ascencion, longitude) of the cusp of one house following the method:
+ * computes the coordinates (right ascension, longitude) of the cusp of any house (1-6) following North's method 0:
  * * Hour Lines (fixed boundaries) method
  * * Cusps are intersections of the ecliptic by the horizon, the meridian circle, and the unequal hour lines on the sphere for even-numbered hours.
- * * This method is usually graphical, with aid of an astrolabe.
+ * * This method is usually graphical, with aid of an astrolabe (here emulated with a convergence function).
  *
  * @param {real} obliquity of the ecliptic in radian
  * @param {real} geographical latitude of the observation location in radian
- * @param {real} right ascention of the Ascendant in radian
- * @param {real} right ascention of the IMC
+ * @param {real} right ascension of the Ascendant in radian
+ * @param {real} right ascension of the IMC in radian
  * @param {integer} index of the house to compute (value 1 to 6)
- * @param {boolean} which coordinate to return (true = right ascention, false = longitude) - default true
- * @return {real} the computed coordinate in radian - this function must be called twice to get both coordinates
+ * @param {boolean} which coordinate to return (true = right ascension, false = longitude) - default true
+ * @return {real} the computed coordinate in radian - this function must be called twice to get both coordinates (right ascension and longitude)
  * @customfunction
  */
 function method0(
@@ -284,16 +291,16 @@ function method0(
 }
 
 /**
- * compute the coordinates (right Ascencion, longitude) of the cusp of an house following the method:
- * * Standard method
+ * computes the coordinates (right ascension, longitude) of the cusp of any house (1-6) following North's method 1:
+ * * Standard method (Alcabitius)
  * * Uniform division of of the cardinal sectors of the Equator
  *
  * @param {real} obliquity of the ecliptic in radian
  * @param {real} right ascension of the Ascendant in radian
- * @param {real} right ascentsion of the IMC
+ * @param {real} right ascension of the IMC
  * @param {integer} index of the house to compute
- * @param {boolean} which coordinate to return (true = right ascention, false = longitude) - default true
- * @return {real} the computed coordinate in radian - this function must be called twice to get both coordinates
+ * @param {boolean} which coordinate to return (true = right ascension, false = longitude) - default true
+ * @return {real} the computed coordinate in radian - this function must be called twice to get both coordinates (right ascension and longitude)
  * @customfunction
  */
 function method1(obliquity, rightASC, rightIMC, houseIndex, getRA = true) {
@@ -325,17 +332,18 @@ function method1(obliquity, rightASC, rightIMC, houseIndex, getRA = true) {
   const longitude = equatorToEcliptic(obliquity, rightAscension);
   return getRA ? rightAscension : longitude;
 }
+
 /**
- * compute the coordinates (right Ascencion, longitude) of the cusp of an house  following the method:
+ * computes the coordinates (right ascension, longitude) of the cusp of any house (1-6) following North's method 2:
  * * Dual longitude method
  * * Uniform division of of the cardinal sectors of the Equator
  *
  * @param {real} obliquity od the ecliptic in radian
  * @param {real} longitude of the Ascendant in radian
- * @param {real} longitude of the IMC
+ * @param {real} longitude of the IMC in radian
  * @param {integer} index of the house to compute
- * @param {boolean} which coordinate to return (true = right ascention, false = longitude) - default true
- * @return {real} the computed coordinate in radian - this function must be called twice to get both coordinates
+ * @param {boolean} which coordinate to return (true = right ascension, false = longitude) - default true
+ * @return {real} the computed coordinate in radian - this function must be called twice to get both coordinates (right ascension and longitude)
  * @customfunction
  */
 function method2(obliquity, longASC, longIMC, houseIndex, getRA = true) {
@@ -369,7 +377,7 @@ function method2(obliquity, longASC, longIMC, houseIndex, getRA = true) {
 }
 
 /**
- * compute the coordinates (right Ascencion, longitude) of the cusp of an house following the method:
+ * computes the coordinates (right ascension, longitude) of the cusp of any house (1-6) following North's method 3:
  * * Prime Vertical (fixed boundaries) method
  * * Uniform division of the Prime Vertical
  *
@@ -378,8 +386,8 @@ function method2(obliquity, longASC, longIMC, houseIndex, getRA = true) {
  * @param {real} right ascendant of the IMC in radian
  * @param {real} longitude of the IMC in radian
  * @param {integer} index of the house to compute
- * @param {boolean} which coordinate to return (true = right ascention, false = longitude) - default true
- * @return {real} the computed coordinate in radian - this function must be called twice to get both coordinates
+ * @param {boolean} which coordinate to return (true = right ascension, false = longitude) - default true
+ * @return {real} the computed coordinate in radian - this function must be called twice to get both coordinates (right ascension and longitude).
  * @customfunction
  */
 function method3(
@@ -390,9 +398,6 @@ function method3(
   houseIndex,
   getRA = true
 ) {
-  // Prime Vertical (fixed boundaries) method
-  // Uniform division of the Prime Vertical
-
   let rightAscension = 0.0;
   let longitude = 0.0;
 
@@ -427,7 +432,7 @@ function method3(
 }
 
 /**
- * compute the coordinates (right Ascencion, longitude) of the cusp of an house following the method:
+ * computes the coordinates (right ascension, longitude) of the cusp of any house (1-6) following North's method 4:
  * * Equatorial (fixed boundaries) method
  * * Uniform division of the Equator (local sphere)
  *
@@ -436,8 +441,8 @@ function method3(
  * @param {real} right ascension of the IMC in radian
  * @param {real} longitude of the IMC in radian
  * @param {integer} index of the house to compute
- * @param {boolean} which coordinate to return (true = right ascention, false = longitude) - default true
- * @return {real} the computed coordinate in radian - this function must be called twice to get both coordinates
+ * @param {boolean} which coordinate to return (true = right ascension, false = longitude) - default true
+ * @return {real} the computed coordinate in radian - this function must be called twice to get both coordinates (right ascension and longitude)
  * @customfunction
  */
 function method4(
@@ -478,21 +483,18 @@ function method4(
 }
 
 /**
- * compute the coordinates (right Ascencion, longitude) of the cusp of an house  following the method:
+ * computes the coordinates (right ascension, longitude) of the cusp of any house (1-6) following North's method 5:
  * * Equatorial (moving boundaries) method
  * * Uniform division of the Equator (celestial sphere)
  *
  * @param {real} obliquity of the ecliptic in radian
  * @param {real} right asension of the Ascendant in radian
  * @param {integer} index of the house to compute
- * @param {boolean} which coordinate to return (true = right ascention, false = longitude) - default true
- * @return {real} the computed coordinate in radian - this function must be called twice to get both coordinates
+ * @param {boolean} which coordinate to return (true = right ascension, false = longitude) - default true
+ * @return {real} the computed coordinate in radian - this function must be called twice to get both coordinates (right ascension and longitude)
  * @customfunction
  */
 function method5(obliquity, rightASC, houseIndex, getRA = true) {
-  // Equatorial (moving boundaries) method
-  // Uniform division of the Equator (celestial sphere)
-
   let rightAscension = 0.0;
   switch (houseIndex) {
     case 1:
@@ -511,20 +513,17 @@ function method5(obliquity, rightASC, houseIndex, getRA = true) {
 }
 
 /**
- * compute the coordinates (right Ascencion, longitude) of the cusp of an house  following the method:
+ * computes the coordinates (right ascension, longitude) of the cusp of any house (1-6) following North's method 6:
  * * Single longitudes method
  * * Uniform division of the Ecliptic
  *
  * @param {real} obliquity of the ecliptic in radian
  * @param {real} longitude of the Ascendant in radian
- * @param {boolean} which coordinate to return (true = right ascention, false = longitude) - default true
- * @return {real} the computed coordinate in radian - this function must be called twice to get both coordinates
+ * @param {boolean} which coordinate to return (true = right ascension, false = longitude) - default true
+ * @return {real} the computed coordinate in radian - this function must be called twice to get both coordinates (right ascension and longitude)
  * @customfunction
  */
 function method6(obliquity, longASC, houseIndex, getRA = true) {
-  // Single longitudes method
-  // Uniform division of the Ecliptic
-
   let longitude = 0.0;
   switch (houseIndex) {
     case 1:
@@ -542,20 +541,23 @@ function method6(obliquity, longASC, houseIndex, getRA = true) {
   return getRA ? rightAscension : longitude;
 }
 
+
+// Global functions for rapid results display
+
 /**
- * compute the coordinates (right Ascencion, longitude) of the cusp of an house, base on method index provided
+ * computes the coordinates (right ascension, longitude) of the cusp of any house (1-6), base on any (0-6)
  * see each method0 to method6 function for details.
  *
  * @param {real} obliquity of the ecliptic in radian
  * @param {real} geographical latitude of the observation location in radian
- * @param {real} right ascention of the Ascendant in radian
+ * @param {real} right ascension of the Ascendant in radian
  * @param {real} longitude of the Ascendant in radian
- * @param {real} right ascention of the IMC in radian
+ * @param {real} right ascension of the IMC in radian
  * @param {real} longitude of the IMC in radian
- * @param {integer} index of the house to compute (1 though 6)
- * @param {integer} index of the method to use (0 though 6)
- * @param {boolean} which coordinate to return (true = right ascention, false = longitude) - default true
- * @return {real} the computed coordinate in radian - this function must be called twice to get both coordinates
+ * @param {integer} index of the house to compute (1-6)
+ * @param {integer} index of the method to use (0-6)
+ * @param {boolean} which coordinate to return (true = right ascension, false = longitude) - default true
+ * @return {real} the computed coordinate in radian - this function must be called twice to get both coordinates (right ascension and longitude)
  * @customfunction
  */
 function computeCuspWithMethodInRadian(
@@ -618,7 +620,8 @@ function computeCuspWithMethodInRadian(
 }
 
 /**
- * compute the coordinates (right Ascencion, longitude) of the cusp of an house, for a specific method based on geographical latitude and longitude ascendant.
+ * computes the coordinates (right ascension, longitude) of the cusp of any house (1-6), for any method (0-6), based on geographical latitude and ascendant longitude
+ * (coordinates of the IMC are computed from the ascensional difference, cf. North's formula 5)
  *
  * @param {real} obliquity in radian
  * @param {real} geographical latitude of the obervation location in radian
@@ -637,11 +640,6 @@ function computeCuspFromLatitudeInRadian(
   method,
   getRA = true
 ) {
-  // Compute a cusp given a known obliquity, geographical latitude, ascendant, and method
-
-  // Pre-computes IMC (rightIMC = rightVernalPoint + pi/2)
-  // Formula (5) : sin(ascensionalDifference) = tan(obliquity) * tan(geoLat) * sin(rightASC)
-  // where the ascensionalDifference = rightASC - rightVernalPoint
 
   const rightASC = eclipticToEquator(obliquity, longASC);
   const ascensionalDifference = Math.asin(
@@ -664,15 +662,15 @@ function computeCuspFromLatitudeInRadian(
 }
 
 /**
- * compute the coordinates (right Ascencion, longitude) of the cusp of an house, for a specific method based on geographical latitude and longitude ascendant.
+ * computes the coordinates (right ascension, longitude) of the cusp of any house (1-6), for any method (0-6), based on geographical latitude and ascendant longitude, all expressed in sexagesimal degrees.
  *
  * @param {string} obliquity in sexagesimal
  * @param {string} geographical latitude of the observation location in sexagesimal
  * @param {string} longitude of the Ascendant in sexagesimal
- * @param {integer} index of the house to compute (1 though 6)
- * @param {integer} index of the method to use (0 though 6)
- * @param {boolean} which coordinate to return (true = right ascention, false = longitude) - default true
- * @return {string} the computed coordinate in sexagesimal - this function must be called twice to get both coordinates
+ * @param {integer} index of the house to compute (1-6)
+ * @param {integer} index of the method to use (0-6)
+ * @param {boolean} which coordinate to return (true = right ascension, false = longitude) - default true
+ * @return {string} the computed coordinate in sexagesimal - this function must be called twice to get both coordinates (right ascension and longitude)
  * @customfunction
  */
 function computeCuspFromLatitudeInSexagesimal(
@@ -701,15 +699,16 @@ function computeCuspFromLatitudeInSexagesimal(
 }
 
 /**
- * compute the coordinates (right Ascencion, longitude) of the cusp of an house, for a specific method based on observed longitudes.
+ * computes the coordinates (right ascension, longitude) of the cusp of any house (1-6), for any method (0-6) based on observed longitudes.
+ * (geographical latitude is not given but deduced from the right ascensions of the Ascendant and IMC)
  *
  * @param {real} obliquity in radian
  * @param {real} observed longitude of the Ascendant in radian
  * @param {real} observed longitude of the IMC in radian
- * @param {integer} index of the house to compute (1 though 6)
- * @param {integer} index of the method to use (0 though 6)
- * @param {boolean} which coordinate to return (true = right ascention, false = longitude) - default true
- * @return {real} the computed coordinate in radian - this function must be called twice to get both coordinates
+ * @param {integer} index of the house to compute (1-6)
+ * @param {integer} index of the method to use (0-6)
+ * @param {boolean} which coordinate to return (true = right ascension, false = longitude) - default true
+ * @return {real} the computed coordinate in radian - this function must be called twice to get both coordinates (right ascension and longitude)
  * @customfunction
  */
 function computeCuspFromLongitudeInRadian(
@@ -720,7 +719,6 @@ function computeCuspFromLongitudeInRadian(
   method,
   getRA = true
 ) {
-  // Compute a cusp given a known obliquity, ascendant, MC, and method (geographical latitude unknown)
 
   const rightASC = eclipticToEquator(obliquity, longASC);
   const rightIMC = eclipticToEquator(obliquity, longIMC);
@@ -740,17 +738,18 @@ function computeCuspFromLongitudeInRadian(
 }
 
 /**
- * compute the coordinates (right Ascencion, longitude) of the cusp of an house, for a specific method based on observed longitudes.
+ * computes the coordinates (right ascension, longitude) of the cusp of any house (1-6), for any method (0-6), based on observed longitudes, all expressed in sexagesimal degrees.
  *
  * @param {string} obliquity in sexagesimal
  * @param {string} observed longitude of the Ascendant in sexagesimal
  * @param {string} observed longitude of the IMC in sexagesimal
- * @param {integer} index of the house to compute (1 though 6)
- * @param {integer} index of the method to use (0 though 6)
- * @param {boolean} which coordinate to return (true = right ascention, false = longitude) - default true
- * @return {string} the computed coordinate in sexagesimal - this function must be called twice to get both coordinates
+ * @param {integer} index of the house to compute (1-6)
+ * @param {integer} index of the method to use (0-6)
+ * @param {boolean} which coordinate to return (true = right ascension, false = longitude) - default true
+ * @return {string} the computed coordinate in sexagesimal - this function must be called twice to get both coordinates (right ascention and longitude)
  * @customfunction
- */ function computeCuspFromLongitudeInSexagesimal(
+ */
+function computeCuspFromLongitudeInSexagesimal(
   obliquitySxg,
   longASCSxg,
   longIMCSxg,
@@ -775,8 +774,10 @@ function computeCuspFromLongitudeInRadian(
   );
 }
 
+// Quality coefficients
+
 /**
- * compute quality coefficient between observe longitude and computed longitude
+ * computes quality coefficient between observed longitude and computed longitude
  *
  * @param {real} observed longitude in radian
  * @param {real} computed longitude in radian
@@ -784,15 +785,14 @@ function computeCuspFromLongitudeInRadian(
  * @customfunction
  */
 function qualityCoefficientRadian(observedLongitude, computedLongitude) {
-  // Difference between the cusp provided and the expected value
   return moduloRange(Math.abs(computedLongitude - observedLongitude), Math.PI);
 }
 
 /**
- * compute quality coefficient between observe longitude and computed longitude
+ * computes quality coefficient between observed longitude and computed longitude, expressed in sexagesimal degrees
  *
- * @param {string} observed longitude in sexagesimal
- * @param {string} computed longitude in sexagesimal
+ * @param {string} observed longitude in sexagesimal degrees
+ * @param {string} computed longitude in sexagesimal degrees
  * @return {real} quality coefficient in decimal degrees
  * @customfunction
  */
@@ -805,13 +805,15 @@ function qualityCoefficientDegree(observedLongitudeSx, computedLongitudeSx) {
   );
 }
 
+// Geographical latitude
+
 /**
- * calculates the theoretical latitude of the observation location from the obliquity of the ecliptic and the right ascensions of the ascendant and the Imum Caeli (IMC).
+ * calculates the theoretical latitude of the observation location from the right ascensions of the ascendant and the Imum Caeli (IMC) and the obliquity of the ecliptic, all expressed in sexagesimal degrees.
  *
  * @param {string} obliquity of the ecliptic in sexagesimal
  * @param {string} right ascension of the Ascendant in sexagesimal
  * @param {string} right ascension of the IMC in sexagesimal
- * @return {string} the computed geographical latitude of observationb location in sexagesimal
+ * @return {string} the computed geographical latitude of observation location in sexagesimal
  * @customfunction
  */
 function retrieveLatitudeSexagesimal(obliquitySxg, rightASCSxg, rightIMCSxg) {
@@ -826,7 +828,7 @@ function retrieveLatitudeSexagesimal(obliquitySxg, rightASCSxg, rightIMCSxg) {
 }
 
 /**
- * calculates the theoretical latitude of the observation location from the obliquity of the ecliptic and the longitude of the ascendant and the Imum Caeli (IMC).
+ * calculates the theoretical latitude of the observation location from the longitudes of the ascendant and the Imum Caeli (IMC) and the obliquity of the ecliptic, all expressed in sexagesimal degrees.
  *
  * @param {string} obliquity of the ecliptic in sexagesimal
  * @param {string} longitude of the Ascendant in sexagesimal
@@ -850,16 +852,16 @@ function retrieveLatitudeFromLongSexagesimal(
 }
 
 /**
- * calculates the theoretical latitude of the observation location from the obliquity of the ecliptic and the longitude of the ascendant and the Imum Caeli (IMC), when deviated of an error of observation in a direction
+ * calculates the theoretical latitude of the observation location from the obliquity of the ecliptic and the longitudes of the ascendant and the Imum Caeli (IMC) in radian, when deviated of an error of observation (or rounding approximation) in a direction
  *
  * @param {real} obliquity of the ecliptic in radian
  * @param {real} longitude of the Ascendant in radian
  * @param {real} longitude of the IMC in radian
  * @param {real} error of observation in radian
  * @param {integer} direction of the error - a valude from 0 to 4.
- *   - 0 indicated no deviation
- *   - 1 and 2 indicate deviation by error value resp in lower or excess from longitude of ascendant
- *   - 4 and 3 indicate deviation by error value resp in lower or excess from longitude of IMC
+ *   - 0 indicates no deviation
+ *   - 1 and 2 indicate deviation by error value respectively in lower or excess from the longitude of the ascendant
+ *   - 4 and 3 indicate deviation by error value respectively in lower or excess from the longitude of the IMC/MC
  * @return {real} the computed geographical latitude in radian
  * @customfunction
  */
@@ -868,23 +870,23 @@ function retrieveLatitudeRange(obliquity, longASC, longIMC, error, direction) {
   const rightIMC = eclipticToEquator(obliquity, longIMC);
 
   switch (direction) {
+    // Case 0 : exact value
     case 0:
-      // 0 Exact value
       return retrieveLatitude(obliquity, rightASC, rightIMC);
 
-    // Case 1 (uppper) and 2 (lower) : assumption that the astrologer started from the ascendent (+/- max error)
+    // Case 1 (lower) and 2 (upper) : assumption that the astrologer started from the ascendent (+/- max error)
     case 1:
       // 1 rightASC - error
-      // NOTE: it is a change from initial program
-      // Initial program: FOI = RetrieveLatitudeRange = retrieveLatitude(obliquity, rightASC - error, rightIMC - error)
+      // NOTE: it is a change from North's programme
+      // Initial programme: FOI = RetrieveLatitudeRange = retrieveLatitude(obliquity, rightASC - error, rightIMC - error)
       return retrieveLatitude(obliquity, rightASC - error, rightIMC);
     case 2:
       // 2 rightASC + error
-      // NOTE: it is a change from initial program
-      // Initial program: FIO = RetrieveLatitudeRange = retrieveLatitude(obliquity, rightASC + error, rightIMC - error)
+      // NOTE: it is a change from North's programme
+      // Initial programme: FIO = RetrieveLatitudeRange = retrieveLatitude(obliquity, rightASC + error, rightIMC - error)
       return retrieveLatitude(obliquity, rightASC + error, rightIMC);
 
-    //Case 3 (left) and 4 (right) : assumption that the astrologer started from the MC (+/- max error)
+    // Case 3 (left) and 4 (right) : assumption that the astrologer started from the MC (+/- max error)
     case 3:
       // 3 rightIMC + error
       return retrieveLatitude(obliquity, rightASC, rightIMC + error);
@@ -900,7 +902,7 @@ function retrieveLatitudeRange(obliquity, longASC, longIMC, error, direction) {
 }
 
 /**
- * calculates the theoretical latitude of the observation location from the obliquity of the ecliptic and the longitude of the ascendant and the Imum Caeli (IMC), when deviated of an error of observation in a direction
+ * calculates the theoretical latitude of the observation location from the obliquity of the ecliptic and the longitudes of the ascendant and the Imum Caeli (IMC) in sexagesimal degrees, when deviated of an error of observation (or rounding approximation) in a direction
  *
  * @param {string} obliquity of the ecliptic in sexagesimal
  * @param {string} longitude of the Ascendant in sexagesimal
@@ -908,8 +910,8 @@ function retrieveLatitudeRange(obliquity, longASC, longIMC, error, direction) {
  * @param {string} error of observation in sexagesimal
  * @param {integer} direction of the error - a valude from 0 to 4.
  *   - 0 indicated no deviation
- *   - 1 and 2 indicate deviation by error value resp in lower or excess from longitude of ascendant
- *   - 4 and 3 indicate deviation by error value resp in lower or excess from longitude of IMC
+ *   - 1 and 2 indicate deviation by error value respectively in lower or excess from longitude of ascendant
+ *   - 4 and 3 indicate deviation by error value respectively in lower or excess from longitude of IMC
  * @return {string} the computed geographical latitude in sexagesimal
  * @customfunction
  */
@@ -933,13 +935,16 @@ function retrieveLatitudeRangeSexagesimal(
   );
 }
 
+
+// Global functions (North's methods A and B)
+
 /**
- * compute the theoretical calculation of the sexagesimal longitudes and/or right ascensions of the first 6 houses (the next 6 are inferred by symmetry) according to the 7 historical house systems
+ * Method A : computes the theoretical calculation of the sexagesimal longitudes and/or right ascensions of the first 6 houses (the next 6 are inferred by symmetry) according to the 7 historical house systems
  * @param {string} obliquity of the ecliptic in sexagesimal
  * @param {string} geographical latitude of observation location in sexagesimal
  * @param {string} longitude of the Ascendant in sexagesimal
  * @param {integer} number of rows to separate the 2 result tables
- * @return {string} an arrays of lines and columns that provides all longitudes and right assencions computed
+ * @return {string} an array of lines and columns that provides all longitudes and right ascensions computed
  * @customfunction
  */
 function computeLongitudesAllMethodsLatitude(
@@ -951,7 +956,6 @@ function computeLongitudesAllMethodsLatitude(
   const methods = [0, 1, 2, 3, 4, 5, 6];
   const houses = [1, 2, 3, 4, 5, 6];
 
-  // each method take the baseElement as parameter and return the 2 arrays in radian
   const zoneAscendantsSx = houses.map((L) => Array(methods.length).fill("-"));
   const zoneLongitudesSx = houses.map((L) => Array(methods.length).fill("-"));
   houses.forEach((house, hInd) => {
@@ -982,12 +986,12 @@ function computeLongitudesAllMethodsLatitude(
 }
 
 /**
- * Theoretical calculation of the latitude of the observation site (with an interval corresponding to the margin of error, applied to the right ascension of the ascendant or the midheaven) and a comparison with the theoretical longitudes (calculated considering only the ascendant and the midheaven) according to the seven historical house systems, with a quality coefficient (generally allowing the method actually used to be identified)
+ * Method B: Theoretical calculation of the latitude of the observation site (with an interval corresponding to the margin of error, applied to the right ascension of the ascendant or the midheaven) and a comparison with the theoretical longitudes (calculated considering only the ascendant and the midheaven) according to the seven historical house systems, with a quality coefficient (generally allowing the method actually used to be identified)
  * @param {string} obliquity of the ecliptic in sexagesimal
- * @param {range of string} observed longitudes for all 6 houses in sexagesimal
+ * @param {range of strings} observed longitudes for all 6 houses in sexagesimal
  * @param {string} error for geographical latitude deviation in sexagesimal
- * @param {integer} number of rows to separate each results
- * @return {string} an arrays of lines and columns that provides all longitudes, all qualities of computed longitudes vs observed ones, all right ascencions computed, and the cross of geographical latitude deviation
+ * @param {integer} number of rows to separate each result table
+ * @return {string} an array of lines and columns that provides all theoretical longitudes, quality coefficients, theoretical right ascensions, and the cross of geographical latitude deviation
  * @customfunction
  */
 function computeLongitudesAllMethodsLongitude(
@@ -1000,14 +1004,13 @@ function computeLongitudesAllMethodsLongitude(
   const houses = [1, 2, 3, 4, 5, 6];
   const qualities = [1, 2, 3, 4, 5, 6];
 
-  // each method take the baseElement as parameter and return the 2 arrays in radian
   const zoneAscendantsSx = houses.map((L) => Array(methods.length).fill("-"));
   const zoneLongitudesSx = houses.map((L) => Array(methods.length).fill("-"));
   const zoneQualityDeg = qualities.map((L) => Array(methods.length).fill("-"));
   const zoneAvgQualityDeg = [Array(methods.length).fill("-")];
 
   const longASCSx = longitudesSx[0].toString(); // by definition the ASC is the observed longiude of house 1
-  const longIMCSx = longitudesSx[3].toString(); // by definition the ASC is the observed longiude of house 4
+  const longIMCSx = longitudesSx[3].toString(); // by definition the IMC is the observed longiude of house 4
 
   houses.forEach((house, hInd) => {
     methods.forEach((method, mInd) => {
@@ -1035,7 +1038,7 @@ function computeLongitudesAllMethodsLongitude(
     });
   });
 
-  // compute quality average
+  // computes quality average
   methods.forEach((method, mInd) => {
     zoneAvgQualityDeg[0][mInd] =
       (zoneQualityDeg[1][mInd] +
