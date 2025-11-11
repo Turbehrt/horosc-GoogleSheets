@@ -5,11 +5,10 @@
 // Adaptation for Google Sheets by François J. Tur and Alexandre Tur, 2021-.
 
 // This software is governed by the CeCILL-B license under French law and
-// abiding by the rules of distribution of free software.  You can  use, 
+// abiding by the rules of distribution of free software.  You can  use,
 // modify and/ or redistribute the software under the terms of the CeCILL-B
 // license as circulated by CEA, CNRS and INRIA at the following URL:
 // http://www.cecill.info.
-
 
 // Auxiliary trigonometry
 
@@ -18,44 +17,43 @@ const HalfPI = Math.PI / 2.0;
 const ThirdPI = Math.PI / 3.0;
 const SixthPI = Math.PI / 6.0;
 
-
 /**
  * for a periodic function, ensures the value is within 0 - range, by cutting it by range size
  * @param {real} value to bound
- * @param {real} range upper bound of the range. 0 is the lower bound
+ * @param {real} range width, by default the bound i [0, range].
+ * @param {boolean} optional indication if the bound should be centered on zero [-range, +range]
  * @return {real} bounded value within range
  * @customfunction
  */
-function moduloRange(value, range) {
+function moduloRange(value, range, zCentered = false) {
   let v = value;
-  while (v < 0) {
-    v = v + range;
+  let s = 1;
+  if (zCentered) {
+    v = Math.abs(value);
+    s = Math.sign(value);
+  } else {
+    while (v < 0) {
+      v = v + range;
+    }
   }
   while (v >= range) {
     v = v - range;
   }
-  return v;
+  return s * v;
 }
 
 /**
  * computes the symetry of a value against a symetry point
  * @customfunction
  */
-function symetryTo(value, symetryPoint) {
-  if (value > symetryPoint) {
-    return Math.abs(2 * symetryPoint - value);
-  }
-  return value;
+function moduloTwoPI(value, zCentered = false) {
+  return moduloRange(value, TwoPI, zCentered);
 }
-function moduloTwoPI(value) {
-  return moduloRange(value, TwoPI);
-}
-
 
 // Degree/radian conversion and sexagesimal display
 
-const SEXA_FORMAT = new RegExp("\\d+(\\D+)\\d+(\\D+)");
-const SEXA_VALUE = new RegExp("(\\d+)\\D+(\\d+)\\D+(\\d+)");
+const SEXA_FORMAT = new RegExp("-?\\d+(\\D+)\\d+(\\D+)\\d+(\\D*)");
+const SEXA_VALUE = new RegExp("(-?\\d+)\\D+(\\d+)\\D+(\\d+)");
 
 /**
  * Extracts the sexagesimal format from a sexagesimal value
@@ -90,7 +88,7 @@ function sexagesimalToRadian(sexa) {
       s = s / 60.0;
     }
   });
-  return moduloTwoPI((r / 360.0) * 2 * Math.PI);
+  return moduloTwoPI((r / 360.0) * TwoPI, true);
 }
 
 /**
@@ -102,10 +100,11 @@ function sexagesimalToRadian(sexa) {
  * @return {string} the sexagesimal representation of the radian value
  * @customfunction
  */
-function radianToSexagesimal(radian, fmt = ".'") {
-  const degSep = fmt[0] || ".";
+function radianToSexagesimal(radian, fmt = "°'\"") {
+  const degSep = fmt[0] || "°";
   const mnSep = fmt[1] || "'";
-  const dg = (moduloTwoPI(radian) * 360.0) / TwoPI;
+  const secSep = fmt.length > 0 ? fmt[2] || "" : '"';
+  const dg = (moduloTwoPI(radian, true) * 360.0) / TwoPI;
   let d = Math.floor(dg);
   let s = Math.round((dg - d) * 3600);
   let m = Math.floor(s / 60);
@@ -116,9 +115,8 @@ function radianToSexagesimal(radian, fmt = ".'") {
   }
   return `${d}${degSep}${m < 10 ? "0" : ""}${m}${mnSep}${
     s < 10 ? "0" : ""
-  }${s}`;
+  }${s}${secSep}`;
 }
-
 
 // Astronomical trigonometry
 
@@ -131,10 +129,7 @@ function radianToSexagesimal(radian, fmt = ".'") {
  */
 function eclipticToEquator(obliquity, longitude) {
   return moduloTwoPI(
-    Math.atan2(
-      Math.cos(obliquity) * Math.sin(longitude),
-      Math.cos(longitude)
-    )
+    Math.atan2(Math.cos(obliquity) * Math.sin(longitude), Math.cos(longitude))
   );
 }
 
@@ -154,7 +149,6 @@ function equatorToEcliptic(obliquity, rightAscension) {
   );
 }
 
-
 /**
  * calculates the theoretical latitude of the observation location from the obliquity of the ecliptic and the right ascension of the ascendant and the Imum Caeli (IMC, opposite the Medium Caeli).
  * @param {real} obliquity in radian
@@ -163,17 +157,25 @@ function equatorToEcliptic(obliquity, rightAscension) {
  * @return {real} the geographical latitude in radian
  * @customfunction
  */
-function retrieveLatitude(obliquity, rightASC, rightIMC) {
+function retrieveLatitude(obliquity, rightASC, rightIMC, methNorth = true) {
   const bracket = rightIMC - rightASC;
-  return (lat = symetryTo(
-    moduloRange(
-      Math.abs(
-        Math.atan2(Math.cos(bracket), Math.sin(rightASC) * Math.tan(obliquity))
-      ),
-      Math.PI
-    ),
-    HalfPI
-  ));
+  let lat = Math.atan2(
+    Math.cos(bracket),
+    Math.sin(rightASC) * Math.tan(obliquity)
+  );
+
+  if (methNorth) {
+    // initial code from NORTH - seems valid only if latitude > 0, meaning if observation is in north hemisphere
+    lat = moduloTwoPI(Math.abs(lat));
+    if (lat > HalfPI && lat < Math.PI) {
+      lat = Math.PI - lat;
+    }
+  } else {
+    // following lines return a value centered on [-Pi/2, +Pi/2] that may be more compatible with south hemishpere
+    if (lat > Math.PI / 2) lat -= Math.PI;
+    if (lat < -Math.PI / 2) lat += Math.PI;
+  }
+  return lat;
 }
 
 /**
@@ -190,7 +192,6 @@ function retrieveLatitudeFromLong(obliquity, longASC, longIMC) {
 
   return retrieveLatitude(obliquity, rightASC, rightIMC);
 }
-
 
 // Domification
 
@@ -541,7 +542,6 @@ function method6(obliquity, longASC, houseIndex, getRA = true) {
   return getRA ? rightAscension : longitude;
 }
 
-
 // Global functions for rapid results display
 
 /**
@@ -640,7 +640,6 @@ function computeCuspFromLatitudeInRadian(
   method,
   getRA = true
 ) {
-
   const rightASC = eclipticToEquator(obliquity, longASC);
   const ascensionalDifference = Math.asin(
     Math.sin(rightASC) * Math.tan(obliquity) * Math.tan(geoLatitude)
@@ -719,7 +718,6 @@ function computeCuspFromLongitudeInRadian(
   method,
   getRA = true
 ) {
-
   const rightASC = eclipticToEquator(obliquity, longASC);
   const rightIMC = eclipticToEquator(obliquity, longIMC);
   const geoLatitude = retrieveLatitude(obliquity, rightASC, rightIMC);
@@ -934,7 +932,6 @@ function retrieveLatitudeRangeSexagesimal(
     fmt
   );
 }
-
 
 // Global functions (North's methods A and B)
 
