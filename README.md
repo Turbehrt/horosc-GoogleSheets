@@ -3,7 +3,7 @@
 [![en](https://img.shields.io/badge/lang-en-red.svg)](/README.md)
 [![fr](https://img.shields.io/badge/lang-fr-blue.svg)](/README.fr.md)
 
-Version 1.1 (2025)
+En route for version 2 (readme not yet updated)
 
 ## Project background
 
