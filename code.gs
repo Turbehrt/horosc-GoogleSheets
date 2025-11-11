@@ -157,20 +157,24 @@ function equatorToEcliptic(obliquity, rightAscension) {
  * @return {real} the geographical latitude in radian
  * @customfunction
  */
-function retrieveLatitude(obliquity, rightASC, rightIMC) {
+function retrieveLatitude(obliquity, rightASC, rightIMC, methNorth = true) {
   const bracket = rightIMC - rightASC;
-  let lat = Math.abs(
-    Math.atan2(Math.cos(bracket), Math.sin(rightASC) * Math.tan(obliquity))
+  let lat = Math.atan2(
+    Math.cos(bracket),
+    Math.sin(rightASC) * Math.tan(obliquity)
   );
-  // initial code from NORTH - seems valid only if latitude > 0, meaning if observation is in notrh hemisphere
-  lat = moduloTwoPI(lat);
-  if (lat > HalfPI) {
-    lat = Math.PI - lat;
-  }
 
-  // following lines return a value centered on [-Pi/2, +Pi/2] that is compatible with south hemishpere
-  // if (lat > Math.PI / 2) lat -= Math.PI;
-  // if (lat < -Math.PI / 2) lat += Math.PI;
+  if (methNorth) {
+    // initial code from NORTH - seems valid only if latitude > 0, meaning if observation is in north hemisphere
+    lat = moduloTwoPI(Math.abs(lat));
+    if (lat > HalfPI && lat < Math.PI) {
+      lat = Math.PI - lat;
+    }
+  } else {
+    // following lines return a value centered on [-Pi/2, +Pi/2] that may be more compatible with south hemishpere
+    if (lat > Math.PI / 2) lat -= Math.PI;
+    if (lat < -Math.PI / 2) lat += Math.PI;
+  }
   return lat;
 }
 
