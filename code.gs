@@ -52,8 +52,8 @@ function moduloTwoPI(value, zCentered = false) {
 
 // Degree/radian conversion and sexagesimal display
 
-const SEXA_FORMAT = new RegExp("-?\\d+(\\D+)\\d+(\\D+)\\d+(\\D*)");
-const SEXA_VALUE = new RegExp("(-?\\d+)\\D+(\\d+)\\D+(\\d+)");
+const SEXA_FORMAT = new RegExp("-?\\d+(\\D+)\\d+(\\D+)\\d*(\\D*)");
+const SEXA_VALUE = new RegExp("(-?\\d+)\\D+(\\d+)\\D*(\\d*)");
 
 /**
  * Extracts the sexagesimal format from a sexagesimal value
