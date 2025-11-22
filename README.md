@@ -48,19 +48,11 @@ It produces four tables: theoretical longitudes, quality coefficients, right asc
 A model spreadsheet is available: https://docs.google.com/spreadsheets/d/1UWJM_OhMITBi0EqJBSEJliBTDF_XL4UtUA6idv0KYEA/copy (read-only: to be copied and modified in a personal Google space).
 
 > [!NOTE]
-> All numbers (inputs and results, except for quality coefficients) are expressed in degrees in sexagesimal form (e.g. 187.12'04 for 187°12'04'').
+> All numbers (inputs and results, except for quality coefficients) are expressed in degrees in sexagesimal form. One string is expected, with any separators, for instance: 187.12'04, 187°12'04'', 187d 12m).
 
-## Calculation method
+## Calculation methods and intermediate functions
 
-Each of the two main formulas calls intermediate functions, which are not recommended for direct use in the spreadsheet in order to limit latency.
-* `sexagesimalToRadian`: converts a sexagesimal number in degrees to radians
-* `radianToSexagesimal`: converts a number in radians to degrees (sexagesimal form)
-* `moduloTwoPI`
-* `eclipticToEquator`: converts a longitude into right ascension (given the obliquity of the ecliptic)
-* `equatorToEcliptic`: converts a right ascension into longitude (given the obliquity of the ecliptic)
-* domification functions (`method0`, `method1`, `method2`, `method3`, `method4`, `method5`, `method6`): for each method, given the obliquity of the ecliptic, the geographical latitude of the observation location, the longitude and right ascension of the ascendant, the longitude and right ascension of the *Imum Caeli* (cusp of the 4th house, opposite the Midheaven), returns the set of longitudes and right ascensions of the cusps of the first 6 houses. Method 0 uses a convergence function, `converge`, to emulate a graphical approach on the astrolabe.
-* `retrieveLatitude`: calculates the theoretical latitude of the observation location from the obliquity of the ecliptic and the right ascensions of the ascendant and the *Imum Caeli* (IMC).
-* `qualities`: from two sets of longitudes (provided by a historical source and calculated theoretically) <ins>**expressed in radians**</ins>, calculates the absolute difference and produces an overall quality coefficient (average of the absolute differences for houses 2, 3, 5 and 6).
+### Sequences
 
 The two methods perform the calculations as follows:
 
@@ -84,3 +76,24 @@ The two methods perform the calculations as follows:
     + vertically, the values in case of error/approximation of the right ascension of the ascendant
     + horizontally, the values in case of error/approximation of the right ascension of the sky background
   - display of results
+
+### Intermediate functions
+
+Each of the two main formulas calls intermediate functions, which are not recommended for direct use in the spreadsheet in order to limit latency.
+* `sexagesimalToRadian`: converts a sexagesimal number in degrees to radians
+* `radianToSexagesimal`: converts a number in radians to degrees (sexagesimal form)
+* `moduloTwoPI`
+* `eclipticToEquator`: converts a longitude into right ascension (given the obliquity of the ecliptic)
+* `equatorToEcliptic`: converts a right ascension into longitude (given the obliquity of the ecliptic)
+* domification functions (`method0`, `method1`, `method2`, `method3`, `method4`, `method5`, `method6`): for each method, given the obliquity of the ecliptic, the geographical latitude of the observation location, the longitude and right ascension of the ascendant, the longitude and right ascension of the *Imum Caeli* (cusp of the 4th house, opposite the Midheaven), returns the set of longitudes and right ascensions of the cusps of the first 6 houses. Method 0 uses a convergence function, `converge`, to emulate a graphical approach on the astrolabe.
+* `retrieveLatitude`: calculates the theoretical latitude of the observation location from the obliquity of the ecliptic and the right ascensions of the ascendant and the *Imum Caeli* (IMC).
+* `qualities`: from two sets of longitudes (provided by a historical source and calculated theoretically) <ins>**expressed in radians**</ins>, calculates the absolute difference and produces an overall quality coefficient (average of the absolute differences for houses 2, 3, 5 and 6).
+
+
+## Differences from North's initial programme
+
+(ongoing)
+
+## Example data
+
+(ongoing)
