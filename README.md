@@ -3,7 +3,7 @@
 [![en](https://img.shields.io/badge/lang-en-red.svg)](/README.md)
 [![fr](https://img.shields.io/badge/lang-fr-blue.svg)](/README.fr.md)
 
-En route for version 2 (readme not yet updated)
+Version 2 (_en cours_)
 
 ## Project background
 
@@ -48,7 +48,7 @@ It produces four tables: theoretical longitudes, quality coefficients, right asc
 A model spreadsheet is available: https://docs.google.com/spreadsheets/d/1UWJM_OhMITBi0EqJBSEJliBTDF_XL4UtUA6idv0KYEA/copy (read-only: to be copied and modified in a personal Google space).
 
 > [!NOTE]
-> All numbers (inputs and results, except for quality coefficients) are expressed in degrees in sexagesimal form. One string is expected, with any separators, for instance: 187.12'04, 187°12'04'', 187d 12m).
+> All numbers (inputs and results, except for quality coefficients, but including right ascensions) are expressed in degrees in sexagesimal form. Separators provided in the input, if consistant, are reused in the output (ex: 187.12'04, 187°12'04'', 187d 12m).
 
 ## Calculation methods and intermediate functions
 
@@ -59,7 +59,7 @@ The two methods perform the calculations as follows:
 * Method A (`computeLongitudesAllMethodsLatitude`)
   - conversion of inputs to radians
   - calculation of the right ascension of the ascendant
-  - calculation of the right ascension of the *Imum Caeli* (using the ascending difference)
+  - calculation of the right ascension of the *Imum Caeli* (using the ascensional difference)
   - calculation of the longitude of the *Imum Caeli*
   - calling each method and converting the results to degrees (sexagesimal)
   - display of results
@@ -90,7 +90,7 @@ Each of the two main formulas calls intermediate functions, which are not recomm
 * `qualities`: from two sets of longitudes (provided by a historical source and calculated theoretically) <ins>**expressed in radians**</ins>, calculates the absolute difference and produces an overall quality coefficient (average of the absolute differences for houses 2, 3, 5 and 6).
 
 
-## Differences from North's initial programme
+## Differences from J. D. North's initial programme
 
 (ongoing)
 
