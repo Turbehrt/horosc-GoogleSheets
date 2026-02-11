@@ -33,7 +33,7 @@ En connaissant :
 
 le programe fournit :
 *	un calcul théorique de la latitude du lieu d’observation (avec un intervalle correspondant à la marge d’erreur, appliquée à l’ascension droite de l’ascendant ou du milieu du ciel)
-*	une comparaison avec les longitudes théoriques (calculées en considérant justes l'ascendant et le milieu du ciel) selon les 7 méthodes de domification historique, avec coefficient de qualité (permettant généralement d’identifier la méthode effectivement utilisée)
+*	une comparaison avec les longitudes théoriques (calculées en considérant exacts l'ascendant et le milieu du ciel) selon les 7 méthodes de domification historique, avec coefficient de qualité (permettant généralement d’identifier la méthode effectivement utilisée)
 
 Cette méthode est restituée ici par la formule Google Sheets `computeLongitudesAllMethodsLongitude(obliquité de l’écliptique, marge d’erreur, longitudes des 6 maisons, nombre de lignes)`.
 Elle produit quatre tableaux : longitudes théoriques, coefficients de qualité, ascensions droites et intervalle de latitude géographique.
@@ -89,28 +89,29 @@ Depuis la version 2, le code utilise des fonctions intermédiaires similaires à
     * `direction = 3` (gauche) ou `direction = 4` (droite) : marge d'erreur appliquée à la longitude du fond du ciel
 
 > [!IMPORTANT]
-> Depuis la version 2, la formule `retrieveLatitudeRange` corrige des incohérences constatées dans le code PASCAL du programme initial, et ne retourne donc pas les mêmes résultats (que le programme en PASCAL ou que la version 1 de Horosc for Google Sheets). Plus de détails dans la section suivante.
+> Depuis la version 2, la formule `retrieveLatitudeRange` corrige des incohérences constatées dans le code PASCAL du programme initial, et ne retourne donc pas les mêmes résultats (que le programme en PASCAL ou que la version 1 de Horosc for Google Sheets). Plus de détails [ci-dessous](#diff%C3%A9rences-avec-le-programme-initial-de-j-d-north).
     
 * **Domification** : pour chaque méthode de modification, les fonctions `method0(obliquity, geoLatitude, rightASC, rightIMC, houseIndex, getRA)` à `method6` renvoient l'ascension droite (`getRA = true`) ou la longitude (`getRA = false`) de la pointe d'une maison (`houseIndex` de 1 à 6) à partir de l'obliquité de l'écliptique (`obliquity`), de la latitude géographique du lieu d’observation (`geoLatitude`) et de l'ascension droite de l'ascendant et du fond du ciel (`rightASC`, `right IMC`). Entrées et résultats en radians.
-  + `method0`. Méthode des lignes horaires (_Hour Lines method, fixed boundaries_). Les pointes sont les intersections de l'écliptique avec l'horizon, le cercle méridien et les lignes des heures inégales (paires). Cette méthode est généralement graphique, à l'aide d'un astrolabe, ici émulé avec une fonction de convergence (`houseIndex`).
-  + `method1`. Méthode Standard, dite d'Alcabitius (_Standard method_). Division uniforme des secteurs cardinaux de l'équateur.
-  + `method2`. Méthode à double longitude (_Dual longitude method_). Division uniforme des secteurs cardinaux de l'écliptique.
-  + `method3`. Méthode du Premier Vertical (_Prime Vertical method, fixed boundaries_). Division uniforme du Premier Vertical.
-  + `method4`. Méthode équatoriale (_Equatorial method, fixed boundaries_). Division uniforme de l'équateur sur la sphère locale.
-  + `method5`. Méthode équatoriale à limites mobiles (_Equatorial method, moving boundaries_). Division uniforme de l'équateur sur la sphère céleste.
-  + `method6`. Méthode à longitude simple (_Single Longitude Method_). Division univorme de l'écliptique.
-* **Fonctions globales**, permettent d'enchaîner les conversions en fonction des entrées disponibles
-  + `computeCuspWithMethodInRadian(obliquity, geoLatitude, rightASC, longASC, rightIMC, longIMC, houseIndex, method, getRA)` : appelle n'importe quelle méthode (`method`), à partir des longitudes et ascensions droite de l'ascendant et du fond du ciel (en radians)
+  + `method0` : méthode des lignes horaires (_Hour Lines method, fixed boundaries_). Les pointes sont les intersections de l'écliptique avec l'horizon, le cercle méridien et les lignes des heures inégales (paires). Cette méthode est généralement graphique, à l'aide d'un astrolabe, ici émulé avec une fonction de convergence (`houseIndex`).
+  + `method1` : méthode Standard, dite d'Alcabitius (_Standard method_). Division uniforme des secteurs cardinaux de l'équateur.
+  + `method2` : méthode à double longitude (_Dual longitude method_). Division uniforme des secteurs cardinaux de l'écliptique.
+  + `method3` : méthode du Premier Vertical (_Prime Vertical method, fixed boundaries_). Division uniforme du Premier Vertical.
+  + `method4` : méthode équatoriale (_Equatorial method, fixed boundaries_). Division uniforme de l'équateur sur la sphère locale.
+  + `method5` : méthode équatoriale à limites mobiles (_Equatorial method, moving boundaries_). Division uniforme de l'équateur sur la sphère céleste.
+  + `method6` : méthode à longitude simple (_Single Longitude Method_). Division uniforme de l'écliptique.
+* **Fonctions globales**, permettant d'enchaîner les conversions en fonction des entrées disponibles
+  + `computeCuspWithMethodInRadian(obliquity, geoLatitude, rightASC, longASC, rightIMC, longIMC, houseIndex, method, getRA)` : appelle n'importe quelle méthode (`method`), à partir des ascensions droite et longitudes de l'ascendant et du fond du ciel (en radians)
   + `computeCuspFromLatitudeInRadian(obliquity, geoLatitude, longASC, houseIndex, method, getRA)` : appelle n'importe quelle méthode, à partir de la longitude de l'ascendant et de la latitude géographique d'observation (en radians)
   + `computeCuspFromLatitudeInSexagesimal` :  appelle n'importe quelle méthode, à partir de la longitude de l'ascendant et de la latitude géographique d'observation (en degrés)
   + `computeCuspFromLongitudeInRadian(obliquity, longASC, longIMC, houseIndex, method, getRA)` : appelle n'importe quelle méthode, à partir des longitudes de l'ascendant et du milieu du ciel (en radians)
   + `computeCuspFromLongitudeInSexagesimal` : appelle n'importe quelle méthode, à partir des longitudes de l'ascendant et du milieu du ciel (en degrés)
 * **Coefficients de qualité**
-  + `qualityCoefficientRadian(observedLongitude, computedLongitude)`, `qualityCoefficientDegree' : les coefficients de qualité correspondent à la différence entre une longitude observée (transcrite d'une source historique) et une longitude calculée.
+  + `qualityCoefficientRadian(observedLongitude, computedLongitude)`, `qualityCoefficientDegree` : les coefficients de qualité correspondent à la différence entre une longitude observée (transcrite d'une source historique) et une longitude calculée.
 
 ### Différences avec le programme initial de J. D. North
 
-_(à compléter)_
+Plusieurs choix algorithmiques du programme en Pascal, en particulier pour la restitution des latitudes, ont paru surprenants et n'ont pas été transposés à l'identique.
 
-* latitudes : par défaut les latitudes sont en valeur absolue (hémisphère Nord), argument facultatif `methNorth` dans `retrieveLatitude`
-* croix des latitudes : les fonctions `FOI` et `FIO` du code PASCAL, correspondant à nos directions 1 et 2 de `retrieveLatitudeRange` (marge d'erreur appliquée à l'ascendant) retiraient également la marge d'erreur à l'ascension droite du fond du ciel, ce qui n'est pas cohérent avec la logique de calcul. La correction est appliquée depuis la version 2. Il reste cependant possible de calculer manuellement FOI : `retrieveLatitude(obliquity, rightASC - error, rightIMC - error)` et FIO : `retrieveLatitude(obliquity, rightASC + error, rightIMC - error)`.
+* le calcul de la latitude théorique du lieu d'observation suppose que l'observation se fait toujours dans l'hémisphère Nord en appliquant une valeur absolue. **Ce comportement est préservé par défaut dans le présent programme.** A titre expérimental, un argument facultatif `methNorth` a été introduit dans la fonction `retrieveLatitude` : si `methNorth = false`, la latitude est modulée entre -&pi;/2 et &pi;/2 radians. Il n'est pas généralisé aux autres fonctions et il n'est pas recommandé d'y recourir à ce stade.
+
+* la composition initiale de la croix des latitudes nous a paru incohérente. Les fonctions `FOI` et `FIO` du code Pascal, correspondant à nos directions 1 et 2 de `retrieveLatitudeRange` (marge d'erreur appliquée à l'ascendant) retiraient également la marge d'erreur à l'ascension droite du fond du ciel, ce qui n'est pas cohérent avec la logique de calcul. **La correction est appliquée par défaut depuis la version 2 du présent programme.** Il reste cependant possible de calculer manuellement FOI : `retrieveLatitude(obliquity, rightASC - error, rightIMC - error)` et FIO : `retrieveLatitude(obliquity, rightASC + error, rightIMC - error)`.
