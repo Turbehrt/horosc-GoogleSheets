@@ -103,8 +103,8 @@ Depuis la version 2, le code utilise des fonctions intermédiaires similaires à
   + `computeCuspWithMethodInRadian(obliquity, geoLatitude, rightASC, longASC, rightIMC, longIMC, houseIndex, method, getRA)` : appelle n'importe quelle méthode (`method`), à partir des ascensions droite et longitudes de l'ascendant et du fond du ciel (en radians)
   + `computeCuspFromLatitudeInRadian(obliquity, geoLatitude, longASC, houseIndex, method, getRA)` : appelle n'importe quelle méthode, à partir de la longitude de l'ascendant et de la latitude géographique d'observation (en radians)
   + `computeCuspFromLatitudeInSexagesimal` :  appelle n'importe quelle méthode, à partir de la longitude de l'ascendant et de la latitude géographique d'observation (en degrés)
-  + `computeCuspFromLongitudeInRadian(obliquity, longASC, longIMC, houseIndex, method, getRA)` : appelle n'importe quelle méthode, à partir des longitudes de l'ascendant et du milieu du ciel (en radians)
-  + `computeCuspFromLongitudeInSexagesimal` : appelle n'importe quelle méthode, à partir des longitudes de l'ascendant et du milieu du ciel (en degrés)
+  + `computeCuspFromLongitudeInRadian(obliquity, longASC, longIMC, houseIndex, method, getRA)` : appelle n'importe quelle méthode, à partir des longitudes de l'ascendant et du fond du ciel (en radians)
+  + `computeCuspFromLongitudeInSexagesimal` : appelle n'importe quelle méthode, à partir des longitudes de l'ascendant et du fond du ciel (en degrés)
 * **Coefficients de qualité**
   + `qualityCoefficientRadian(observedLongitude, computedLongitude)`, `qualityCoefficientDegree` : les coefficients de qualité correspondent à la différence entre une longitude observée (transcrite d'une source historique) et une longitude calculée.
 
