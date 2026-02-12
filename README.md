@@ -3,7 +3,7 @@
 [![en](https://img.shields.io/badge/lang-en-red.svg)](/README.md)
 [![fr](https://img.shields.io/badge/lang-fr-blue.svg)](/README.fr.md)
 
-Version 2 (2025)
+Version 2 (2026)
 
 ## Project background
 
@@ -45,7 +45,7 @@ It produces four tables: theoretical longitudes, quality coefficients, right asc
 
 ### Google Sheets implementation
 
-A model spreadsheet is available: _(to be completed, see previous versions)_ (read-only: to be copied and modified in a personal Google space).
+A model spreadsheet is available: https://docs.google.com/spreadsheets/d/1loehBW0RA_WLqDHOZ3gs6c-r961kz8pjbS_jsl9doSQ/copy (read-only: to be copied and modified in a personal Google space).
 
 > [!NOTE]
 > All numbers (inputs and results, except for quality coefficients, but including right ascensions) are expressed in degrees in sexagesimal form. Separators provided in the input, if consistant, are reused in the output (ex: 187.12'04, 187°12'04'', 187d 12m).
