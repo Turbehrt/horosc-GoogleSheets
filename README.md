@@ -59,22 +59,22 @@ The two methods perform the calculations as follows:
 * Method A (`computeLongitudesAllMethodsLatitude`)
   - conversion of inputs to radians
   - calculation of the right ascension of the ascendant
-  - calculation of the right ascension of the *Imum Caeli* (using the ascensional difference)
-  - calculation of the longitude of the *Imum Caeli*
+  - calculation of the right ascension of the *Imum Coeli* (using the ascensional difference)
+  - calculation of the longitude of the *Imum Coeli*
   - calling each method and converting the results to degrees (sexagesimal)
   - display of results
 
 * Method B (`computeLongitudesAllMethodsLongitude`)
   - conversion of inputs to radians
-  - extraction of the longitude of the ascendant and *Imum Caeli*
-  - calculation of the right ascensions of the ascendant and *Imum Caeli*
+  - extraction of the longitude of the ascendant and *Imum Coeli*
+  - calculation of the right ascensions of the ascendant and *Imum Coeli*
   - calculation of the theoretical latitude of the observation site
   - calling each method and converting the results to (sexagesimal) degrees
   - calculation of quality coefficients (in radians)
   - conversion of the margin of error into radians and calculation of a latitude interval:
-    + at the centre, the theoretical value (based on the ascendant and *Imum Caeli* provided)
+    + at the centre, the theoretical value (based on the ascendant and *Imum Coeli* provided)
     + vertically, the values in case of error/approximation of the right ascension of the ascendant
-    + horizontally, the values in case of error/approximation of the right ascension of the *Imum Caeli*
+    + horizontally, the values in case of error/approximation of the right ascension of the *Imum Coeli*
   - display of results
 
 ### Intermediate functions
@@ -125,4 +125,9 @@ Several algorithmic choices in the original Pascal program, particularly regardi
 
 * The calculation of the theoretical latitude assumes that observations always take place in the Northern Hemisphere by applying an absolute value. **This behavior is preserved by default in this program.** Experimentally, an optional `methNorth` argument has been introduced in the `retrieveLatitude` function: if `methNorth = false`, the latitude is modulated between $-\pi/2$ and $\pi/2$ radians. This algorithm has not yet been fully tested; using it is currently not recommended (risk of incorrect or inconsistent results).
 
-* The original composition of the "latitude cross" appeared inconsistent. The `FOI` and `FIO` functions in the Pascal code -- corresponding to our directions 1 and 2 in `retrieveLatitudeRange` (error margin applied to the Ascendant) -- also subtracted the error margin from the right ascension of the _Immum Coeli_, which is logically inconsistent with the calculation. **This correction has been applied by default since version 2.** It remains possible to manually calculate FOI as `retrieveLatitude(obliquity, rightASC - error, rightIMC - error)` and FIO as `retrieveLatitude(obliquity, rightASC + error, rightIMC - error)`.
+* The original composition of the "latitude cross" appeared inconsistent. The `FOI` and `FIO` functions in the Pascal code -- corresponding to our directions 1 and 2 in `retrieveLatitudeRange` (error margin applied to the Ascendant) -- also subtracted the error margin from the right ascension of the _Immum Coeli_, which is inconsistent with the calculation logic. **This correction has been applied by default since version 1.** It remains possible to manually calculate FOI as `retrieveLatitude(obliquity, rightASC - error, rightIMC - error)` and FIO as `retrieveLatitude(obliquity, rightASC + error, rightIMC - error)`.
+
+* The margins of error used to calculate the "latitude cross" were associated in Pascal with a value in radians that did not actually correspond to their label. **The margins of error announced (in degrees) are used in this program** (since version 1) instead of the old values in radians, which may lead to latitude estimates that differ from those in the initial program).
+  + \[D] "1 min. arc" was associated with 0.001745329 rad, in reality 0°06'00).
+  + \[E] "half min." was associated with 0.00087266 rad, in reality 0°03'00).
+  + \[F] "1 sec. arc" was associated with 0.000029089 rad, in reality 0°00'06"
