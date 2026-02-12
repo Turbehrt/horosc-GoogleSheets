@@ -39,7 +39,7 @@ Cette méthode est restituée ici par la formule Google Sheets `computeLongitude
 Elle produit quatre tableaux : longitudes théoriques, coefficients de qualité, ascensions droites et intervalle de latitude géographique.
 
 ### Implémentation Google Sheets
-Une feuille de calcul modèle est disponible : https://docs.google.com/spreadsheets/d/1loehBW0RA_WLqDHOZ3gs6c-r961kz8pjbS_jsl9doSQ/copy (en lecture seule : à copier et à modifier dans un espace Google personnel).
+Une feuille de calcul modèle est disponible : https://docs.google.com/spreadsheets/d/18M2eqFzYLSdhdB5qvx8yFhTWTp_QJl2eVlBsq-ZZ2Y8/copy (en lecture seule : à copier et à modifier dans un espace Google personnel).
 
 > [!NOTE]
 > Tous les nombres (entrées et résultats, à l'exception des coefficients de qualité, mais y compris les ascensions droites) sont exprimés en degrés sous forme sexagésimale. Les résultats réutilisent, dans la mesure du possible, les séparateurs fournis en entrée (ex : 187.12'04, 187°12'04'', 187d 12m).
