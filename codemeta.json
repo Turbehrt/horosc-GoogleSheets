@@ -18,11 +18,11 @@
     ],
     "codeRepository": "https://github.com/Turbehrt/horosc-GoogleSheets.git",
     "dateCreated": "2021-10-15",
-    "dateModified": "2025-11-10",
+    "dateModified": "2026-02-12",
     "datePublished": "2025-11-06",
     "description": "This application is designed to calculate and check the domification of a horoscope using the seven main historical methods.\nIt is initially based on on John D. North's program as described in his book: John D. North, Horoscopes and History, London: Warburg Institute, 1986, appendix 4, pp. 197-218.",
     "license": "https://spdx.org/licenses/CECILL-B",
     "name": "Horosc for Google Sheets",
     "programmingLanguage": "Javascript for Google Sheets (Google Apps Script)",
-    "version": "1.1"
+    "version": "2.0"
 }
