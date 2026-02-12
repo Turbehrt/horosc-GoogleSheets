@@ -3,7 +3,7 @@
 [![en](https://img.shields.io/badge/lang-en-red.svg)](/README.md)
 [![fr](https://img.shields.io/badge/lang-fr-blue.svg)](/README.fr.md)
 
-Version 2 (2025)
+Version 2 (2026)
 
 ## Contexte du projet
 L'ouvrage de John D. North, *Horoscopes and History*, Londres : Warburg Institute, 1986, publiait en annexe (appendix 4 p. 197-218) le code d’un programme en Pascal pour MS-DOS, intitulé **HOROSC** et visant à calculer et contrôler la domification d’un horoscope en suivant les 7 principales méthodes historiques.
@@ -39,7 +39,7 @@ Cette méthode est restituée ici par la formule Google Sheets `computeLongitude
 Elle produit quatre tableaux : longitudes théoriques, coefficients de qualité, ascensions droites et intervalle de latitude géographique.
 
 ### Implémentation Google Sheets
-Une feuille de calcul modèle est disponible : _(à compléter, voir les versions antérieures)_ (en lecture seule : à copier et à modifier dans un espace Google personnel).
+Une feuille de calcul modèle est disponible : https://docs.google.com/spreadsheets/d/1loehBW0RA_WLqDHOZ3gs6c-r961kz8pjbS_jsl9doSQ/copy (en lecture seule : à copier et à modifier dans un espace Google personnel).
 
 > [!NOTE]
 > Tous les nombres (entrées et résultats, à l'exception des coefficients de qualité, mais y compris les ascensions droites) sont exprimés en degrés sous forme sexagésimale. Les résultats réutilisent, dans la mesure du possible, les séparateurs fournis en entrée (ex : 187.12'04, 187°12'04'', 187d 12m).
