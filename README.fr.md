@@ -22,7 +22,7 @@ En connaissant :
 le programe fournit :
 * le calcul théorique des longitudes et/ou ascensions droites sexagésimales des 6 premières maisons (les 6 suivantes sont induites par symétrie) selon les 7 méthodes de domification historique
 
-Cette méthode est restituée ici par la formule Google Sheets `computeLongitudesAllMethodsLatitude(obliquité de l’écliptique, longitude de l’ascendant, latitude géographique, nombre de lignes)`.
+Cette méthode est restituée ici par la formule Google Sheets `computeLongitudesAllMethodsLatitude(obliquité de l’écliptique, latitude géographique, longitude de l’ascendant, nombre de lignes)`.
 Elle produit deux tableaux, respectivement pour les longitudes et les ascensions droites, séparés par le nombre de lignes renseigné.
 
 ### Méthode B
@@ -35,7 +35,7 @@ le programe fournit :
 *	un calcul théorique de la latitude du lieu d’observation (avec un intervalle correspondant à la marge d’erreur, appliquée à l’ascension droite de l’ascendant ou du milieu du ciel)
 *	une comparaison avec les longitudes théoriques (calculées en considérant exacts l'ascendant et le milieu du ciel) selon les 7 méthodes de domification historique, avec coefficient de qualité (permettant généralement d’identifier la méthode effectivement utilisée)
 
-Cette méthode est restituée ici par la formule Google Sheets `computeLongitudesAllMethodsLongitude(obliquité de l’écliptique, marge d’erreur, longitudes des 6 maisons, nombre de lignes)`.
+Cette méthode est restituée ici par la formule Google Sheets `computeLongitudesAllMethodsLongitude(obliquité de l’écliptique, longitudes des 6 maisons, marge d’erreur, nombre de lignes)`.
 Elle produit quatre tableaux : longitudes théoriques, coefficients de qualité, ascensions droites et intervalle de latitude géographique.
 
 ### Implémentation Google Sheets
