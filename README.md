@@ -45,7 +45,7 @@ It produces four tables: theoretical longitudes, quality coefficients, right asc
 
 ### Google Sheets implementation
 
-A model spreadsheet is available: https://docs.google.com/spreadsheets/d/1loehBW0RA_WLqDHOZ3gs6c-r961kz8pjbS_jsl9doSQ/copy (read-only: to be copied and modified in a personal Google space).
+A model spreadsheet is available: https://docs.google.com/spreadsheets/d/18M2eqFzYLSdhdB5qvx8yFhTWTp_QJl2eVlBsq-ZZ2Y8/copy (read-only: to be copied and modified in a personal Google space).
 
 > [!NOTE]
 > All numbers (inputs and results, except for quality coefficients, but including right ascensions) are expressed in degrees in sexagesimal form. Separators provided in the input, if consistant, are reused in the output (ex: 187.12'04, 187°12'04'', 187d 12m).
