@@ -26,7 +26,7 @@ the application provides:
 
 * the theoretical calculation of the sexagesimal longitudes and/or right ascensions of the first 6 houses (the next 6 are inferred by symmetry) according to the 7 historical house systems
 
-This method is reproduced here by the Google Sheets formula `computeLongitudesAllMethodsLatitude(obliquity of the ecliptic, longitude of the ascendant, geographical latitude, number of lines)`.
+This method is reproduced here by the Google Sheets formula `computeLongitudesAllMethodsLatitude(obliquity of the ecliptic, geographical latitude, longitude of the ascendant, number of lines)`.
 It produces two tables, one for longitudes and one for right ascensions, separated by the number of lines entered.
 
 ### Method B
@@ -40,7 +40,7 @@ the application provides:
 *    a theoretical calculation of the latitude of the observation site (with an interval corresponding to the margin of error, applied to the right ascension of the ascendant or midheaven)
 *    a comparison with the theoretical longitudes (calculated considering only the ascendant and the midheaven) according to the seven historical house systems, with a quality coefficient (generally allowing the method actually used to be identified)
 
-This method is reproduced here by the Google Sheets formula `computeLongitudesAllMethodsLongitude(obliquity of the ecliptic, margin of error, longitudes of the 6 houses, number of lines)`.
+This method is reproduced here by the Google Sheets formula `computeLongitudesAllMethodsLongitude(obliquity of the ecliptic, longitudes of the 6 houses, margin of error, number of lines)`.
 It produces four tables: theoretical longitudes, quality coefficients, right ascensions and geographical latitude interval.
 
 ### Google Sheets implementation
