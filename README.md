@@ -13,7 +13,7 @@ Due to the obsolescence of the Pascal language, this application became very dif
 
 ## General principle
 
-The programme written by John D. North offered two approaches:
+The program written by John D. North offered two approaches:
 
 ### Method A
 
@@ -128,6 +128,6 @@ Several algorithmic choices in the original Pascal program, particularly regardi
 * The original composition of the "latitude cross" appeared inconsistent. The `FOI` and `FIO` functions in the Pascal code -- corresponding to our directions 1 and 2 in `retrieveLatitudeRange` (error margin applied to the Ascendant) -- also subtracted the error margin from the right ascension of the _Immum Coeli_, which is inconsistent with the calculation logic. **This correction has been applied by default since version 1.** It remains possible to manually calculate FOI as `retrieveLatitude(obliquity, rightASC - error, rightIMC - error)` and FIO as `retrieveLatitude(obliquity, rightASC + error, rightIMC - error)`.
 
 * The margins of error used to calculate the "latitude cross" were associated in Pascal with a value in radians that did not actually correspond to their label. **The margins of error announced (in degrees) are used in this program** (since version 1) instead of the old values in radians, which may lead to latitude estimates that differ from those in the initial program).
-  + \[D] "1 min. arc" was associated with 0.001745329 rad, in reality 0°06'00).
-  + \[E] "half min." was associated with 0.00087266 rad, in reality 0°03'00).
+  + \[D] "1 min. arc" was associated with 0.001745329 rad, in reality 0°06'00"
+  + \[E] "half min." was associated with 0.00087266 rad, in reality 0°03'00"
   + \[F] "1 sec. arc" was associated with 0.000029089 rad, in reality 0°00'06"
