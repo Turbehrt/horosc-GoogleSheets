@@ -73,8 +73,8 @@ The two methods perform the calculations as follows:
   - calculation of quality coefficients (in radians)
   - conversion of the margin of error into radians and calculation of a latitude interval:
     + at the centre, the theoretical value (based on the ascendant and *Imum Coeli* provided)
-    + vertically, the values in case of error/approximation of the right ascension of the ascendant
-    + horizontally, the values in case of error/approximation of the right ascension of the *Imum Coeli*
+    + horizontally, the values in case of error/approximation of the right ascension of the ascendant
+    + vertically, the values in case of error/approximation of the right ascension of the *Imum Coeli*
   - display of results
 
 ### Intermediate functions
@@ -94,8 +94,8 @@ Since version 2, the code uses intermediate functions similar to those in [Horos
   + `retrieveLatitudeFromLong(obliquity, longASC, longIMC)` (radians), `retrieveLatitudeFromLongSexagesimal` (degrees): calculates the theoretical latitude based on the obliquity and the ecliptic longitudes of the Ascendant and *Imum Coeli* (IMC).
   + `retrieveLatitudeRange(obliquity, longASC, longIMC, error, direction)` (radians), `retrieveLatitudeRangeSexagesimal` (degrees): applies an error margin (`error`) to the latitude calculation, following the "cross" method proposed by North.
     * `direction = 0`: no error (identical to `retrieveLatitude`).
-    * `direction = 1` (up) or `direction = 2` (down): error margin applied to the Ascendant's longitude.
-    * `direction = 3` (left) or `direction = 4` (right): error margin applied to the *Imum Coeli*'s longitude.
+    * `direction = 1` (left) or `direction = 2` (right): error margin applied to the Ascendant's longitude.
+    * `direction = 3` (up) or `direction = 4` (down): error margin applied to the *Imum Coeli*'s longitude.
 
 > [!IMPORTANT]
 > As of version 2, the `retrieveLatitudeRange` formula fixes inconsistencies found in the original PASCAL code. Consequently, it does not return the same results as the PASCAL program or version 1 of *Horosc for Google Sheets*. See [Differences with J.D. North's original program](#differences-with-jd-norths-original-program) for more details.
@@ -125,7 +125,15 @@ Several algorithmic choices in the original Pascal program, particularly regardi
 
 * The calculation of the theoretical latitude assumes that observations always take place in the Northern Hemisphere by applying an absolute value. **This behavior is preserved by default in this program.** Experimentally, an optional `methNorth` argument has been introduced in the `retrieveLatitude` function: if `methNorth = false`, the latitude is modulated between $-\pi/2$ and $\pi/2$ radians. This algorithm has not yet been fully tested; using it is currently not recommended (risk of incorrect or inconsistent results).
 
-* The original composition of the "latitude cross" appeared inconsistent. The `FOI` and `FIO` functions in the Pascal code -- corresponding to our directions 1 and 2 in `retrieveLatitudeRange` (error margin applied to the Ascendant) -- also subtracted the error margin from the right ascension of the _Immum Coeli_, which is inconsistent with the calculation logic. **This correction has been applied by default since version 1.** It remains possible to manually calculate FOI as `retrieveLatitude(obliquity, rightASC - error, rightIMC - error)` and FIO as `retrieveLatitude(obliquity, rightASC + error, rightIMC - error)`.
+* The original composition of the "latitude cross" appeared inconsistent. The `FOI` and `FIO` functions in the Pascal code -- corresponding to our directions 1 and 2 in `retrieveLatitudeRange` (error margin applied to the Ascendant) -- also subtracted the error margin from the right ascension of the _Immum Coeli_, which is inconsistent with the calculation logic. **This correction has been applied by default since version 1.**
+
+| `retrieveLatitude` | | |
+| --- | --- | --- |
+| | (**3**) `RightASC`, `RightIMC + error` |  |
+| (**1**) `RightASC - error`, `RightIMC` | (**0**) `RightASC`, `RightIMC` | (**2**) `RightASC + error`, `RightIMC` |
+| :x: _(**FOI**) `RightASC - error`, `RightIMC - error`_ | (**4**) `RightASC`, `RightIMC - error` | :x: _(**FIO**) `RightASC + error`, `RightIMC + error`_ | 
+
+It remains possible to manually calculate FOI as `retrieveLatitude(obliquity, rightASC - error, rightIMC - error)` and FIO as `retrieveLatitude(obliquity, rightASC + error, rightIMC - error)`.
 
 * The margins of error used to calculate the "latitude cross" were associated in Pascal with a value in radians that did not actually correspond to their label. **The margins of error announced (in degrees) are used in this program** (since version 1) instead of the old values in radians, which may lead to latitude estimates that differ from those in the initial program).
   + \[D] "1 min. arc" was associated with 0.001745329 rad, in reality 0°06'00"
