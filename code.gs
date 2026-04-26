@@ -872,7 +872,7 @@ function retrieveLatitudeRange(obliquity, longASC, longIMC, error, direction) {
     case 0:
       return retrieveLatitude(obliquity, rightASC, rightIMC);
 
-    // Case 1 (lower) and 2 (upper) : assumption that the astrologer started from the ascendent (+/- max error)
+    // Case 1 (left) and 2 (right) : assumption that the astrologer started from the ascendent (+/- max error)
     case 1:
       // 1 rightASC - error
       // NOTE: it is a change from North's programme
@@ -884,7 +884,7 @@ function retrieveLatitudeRange(obliquity, longASC, longIMC, error, direction) {
       // Initial programme: FIO = RetrieveLatitudeRange = retrieveLatitude(obliquity, rightASC + error, rightIMC - error)
       return retrieveLatitude(obliquity, rightASC + error, rightIMC);
 
-    // Case 3 (left) and 4 (right) : assumption that the astrologer started from the MC (+/- max error)
+    // Case 3 (up) and 4 (down) : assumption that the astrologer started from the MC (+/- max error)
     case 3:
       // 3 rightIMC + error
       return retrieveLatitude(obliquity, rightASC, rightIMC + error);
